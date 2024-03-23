@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Effect</title>
+
+    <style type="text/css">
+
+        body{
+            font-family: sans-serif;
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,1),rgba(0,0,0,0.5));
+            color: #fff;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1{
+            font-size: 40px;
+            color: #bbb;
+        }
+
+        span.txtani{
+            animation-name: mycursorani;
+            animation-duration:.8s ;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes mycursorani{
+            from{
+                border: none;
+            }
+
+            to{
+                border-right: 2px solid #bbb;
+            }
+        }
+
+        .red{
+            color: red;
+        }
+
+        .skyblue{
+            color: skyblue;
+        }
+
+        .violet{
+            color: violet;
+        }
+
+        .yellow{
+            color: yellow;
+        }
+
+        em{
+            color: #fff;
+            font-style: unset;
+            animation-name: textlighting;
+            animation-duration: .8s;
+            animation-fill-mode: backwards;
+        }
+
+        @keyframes textlighting {
+            0%{
+                opacity: 0;
+            }
+
+            50%{
+              opacity: 0.5;  
+              text-shadow: 0 0 20px #fff;
+            }
+
+            100%{
+                opacity: 1;  
+              text-shadow: 0 0 20px #fff;
+            }
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <h1>We build with <span class="txtani red">Nodejs</span> Framework. </h1>
+        <h2 class="text-light">Start integrate with your business and app!!!</h2>
+        <p class="text-light">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+    </div>
+
+
+
+    <script type="text/javascript">
+
+        //Get UI
+        const languages = ['Nodejs','Reactjs','Vuejs','Laravel'];
+        const colors = ['red','skyblue','violet','yellow'];
+        const gettxtani = document.querySelector('.txtani');
+        const gettxtlights = document.querySelectorAll('.text-light');
+
+        
+        function* genfun(){
+            var idx = 0;  
+            
+            while(true){
+                if(idx > 3){
+                    idx = 0;
+                }else{
+                    yield idx++;
+                }
+            }
+
+        }
+
+        const getgen = genfun();
+
+        function showword(word){
+            // console.log(word);// Nodejs
+
+            let x = 0;
+            gettxtani.innerHTML = '';
+            gettxtani.classList.add(colors[languages.indexOf(word)]);// red 
+
+            let showinterval = setInterval(function(){
+               if(x >= word.length){
+                clearInterval(showinterval);
+                deletewords();
+               }else{
+                gettxtani.innerHTML += word[x];
+                x++;
+               }
+            },300);
+        }
+
+        showword(languages[getgen.next().value]); // 0 is Nodejs
+
+        function deletewords(){
+
+            let getword = gettxtani.innerHTML;
+            // console.log(getword); // Nodejs
+
+            let getlastidx = getword.length-1;
+            // console.log(getlastidx); // 5
+
+            let delinterval = setInterval(function(){
+                if(getlastidx >= 0){
+                    gettxtani.innerHTML = gettxtani.innerHTML.substring(0,gettxtani.innerHTML.length-1);
+                    getlastidx--;
+                }else{
+
+                    gettxtani.classList.remove(colors[languages.indexOf(getword)]);
+
+                    showword(languages[getgen.next().value]);
+                    clearInterval(delinterval);
+                }
+            },300);
+        }
+
+
+        gettxtlights.forEach((gettxtlight)=>{
+            // console.log(gettxtlight);
+
+            let arrtexts = gettxtlight.textContent.split("");
+            // console.log(arrtexts);
+
+            gettxtlight.textContent = "";
+
+            arrtexts.forEach((arrtext,idx)=>{
+                // console.log(arrtext);
+                // console.log(idx);
+
+                let newem = document.createElement("em");
+                newem.textContent = arrtext;
+                // console.log(newem);
+                newem.style.animationDelay = `${idx*0.05}s`;
+                gettxtlight.append(newem);
+            })
+
+        })
+
+
+
+    </script>
+    
+</body>
+</html>
